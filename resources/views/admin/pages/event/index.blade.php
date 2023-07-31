@@ -4,10 +4,20 @@
 @endsection
 
 @section('content')
-<div style="margin-left: 230px;">
-    {{-- <h2>Event</h2> --}}
+    <div style="margin-left: 230px;">
+        <div class="page-body">
+            <div class="container-fluid">
+                <div class="page-title" style="margin-top: 18px;">
+                    <div class="row">
+                        <div class="col-6">
+                            <h2>Event</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-     
+
         <!-- Container-fluid starts-->
         <div class="container-fluid">
             <div class="row">
@@ -24,8 +34,8 @@
                                     <thead>
                                         <tr>
                                             <th>Sr No.</th>
-                                            <th>Event Name</th>
-                                            <th>User name</th>
+                                            <th>Person name</th>
+                                            <th>Event Date</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -41,10 +51,9 @@
             </div>
         </div>
         <!-- Container-fluid Ends-->
-</div>
-
+    </div>
 @endsection
 
 @section('script')
-<script src="{{ asset('admin_assets/custom/event.js') }}"></script>
+    <script src="{{ asset('admin_assets/custom/event.js') }}"></script>
 @endsection

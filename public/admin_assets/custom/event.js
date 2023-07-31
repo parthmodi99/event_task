@@ -18,21 +18,12 @@ $(document).ready(function () {
             searchable: false
         },
         {
-            data: 'photo',
+            data: 'person_name',
+            name: 'person_name'
         },
         {
-            data: 'full_name',
-        },
-        {
-            data: 'department',
-        },
-        {
-            data: 'opd_number',
-            name: 'opd_number'
-        },
-        {
-            data: 'designation',
-            name: 'designation'
+            data: 'event_date',
+            name: 'event_date'
         },
         {
             data: 'status',
@@ -126,4 +117,134 @@ $(document).ready(function () {
             });
 
     });
+
+    $("form[name='add_event_form']").on('submit', function (e) {
+        e.preventDefault();
+    }).validate({
+        rules: {
+            "person_name": {
+                required: true,
+            },
+            "event_date": {
+                required: true,
+            }
+        },
+        messages: {
+            "person_name": {
+                required: "Please enter person name",
+            },
+            "event_date": {
+                required: "Please select Event Date",
+            }
+        },
+        submitHandler: function (form) {
+            var formData = new FormData(form);
+            $("#add_category_form button[type='submit']").attr('disabled',true);
+            $.ajax({
+                url: $(form).attr("action"),
+                type: 'post',
+                data: formData,
+                processData: false,
+                cache: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.success) {
+                        $.notify(response.message, {
+                            type: 'success'
+                        });
+                        window.location.href = base_url + '/admin/event';
+                    } else if (!response.success) {
+                        $.notify(response.message, {
+                            type: 'danger'
+                        });
+                    } else {
+                        $.notify('Something went wrong', {
+                            type: 'danger'
+                        });
+                    }
+                }
+            });
+            $("#add_category_form button[type='submit']").attr('disabled',false);
+        }
+    });
+
+    $("form[name='edit_event_form']").on('submit', function (e) {
+        e.preventDefault();
+    }).validate({
+        rules: {
+            "person_name": {
+                required: true,
+            },
+            "event_date": {
+                required: true,
+            }
+        },
+        messages: {
+            "person_name": {
+                required: "Please enter person name",
+            },
+            "event_date": {
+                required: "Please select Event Date",
+            }
+        },
+        submitHandler: function (form) {
+            var formData = new FormData(form);
+            $("#add_category_form button[type='submit']").attr('disabled',true);
+            $.ajax({
+                url: $(form).attr("action"),
+                type: 'post',
+                data: formData,
+                processData: false,
+                cache: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.success) {
+                        $.notify(response.message, {
+                            type: 'success'
+                        });
+                        window.location.href = base_url + '/admin/event';
+                    } else if (!response.success) {
+                        $.notify(response.message, {
+                            type: 'danger'
+                        });
+                    } else {
+                        $.notify('Something went wrong', {
+                            type: 'danger'
+                        });
+                    }
+                }
+            });
+            $("#add_category_form button[type='submit']").attr('disabled',false);
+        }
+    });
+
+    $(document).ajaxComplete(function () {
+        $('input[type=checkbox][data-toggle^=toggle]').bootstrapToggle();
+    });
+
+    $(document).on('change', '.status_btn', function(e) {
+        e.preventDefault();
+        id = this.value;
+        // alert(id)
+        $.ajax({
+            type: 'POST',
+            url: base_url + '/admin/event/' + id + '/activate/toggle',
+            "initComplete": function(settings, json) {
+                $('.tgl').bootstrapToggle()
+            },
+            success: function(response) {
+                $.notify(response.message, {
+                    type: 'success'
+                });
+            }
+        });
+    });
+
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
+
+    today = yyyy + '-' + mm + '-' + dd;
+    $('#event_date').attr('min',today);
 });

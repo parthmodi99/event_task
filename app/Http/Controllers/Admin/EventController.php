@@ -2,11 +2,22 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Event;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Validator;
 
 class EventController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('admin');
+        View::share('categories', Category::where('status', 1)->orderby('category')->get());
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -28,7 +39,21 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'person_name' => 'required',
+            'event_date' => 'required|after:yesterday',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'code' => 202, 'message' => implode("<br>", $validator->errors()->all())], 202);
+        }
+
+        $event = $request->all();
+        $success = Event::create($event);
+
+        if ($success) {
+            return response()->json(['success' => true, 'message' => 'Event Added sucessfully.'], 200);
+        }
     }
 
     /**
@@ -44,7 +69,9 @@ class EventController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $event_details = Event::find($id);
+
+        return view('admin.pages.event.edit', compact('event_details'));
     }
 
     /**
@@ -52,7 +79,23 @@ class EventController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'person_name' => 'required',
+            'event_date' => 'required|after:yesterday',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'code' => 202, 'message' => implode("<br>", $validator->errors()->all())], 202);
+        }
+
+        $find_event = Event::find($id);
+
+        $update_event = $request->all();
+        $success = Event::find($id)->update($update_event);
+
+        if ($success) {
+            return response()->json(['success' => true, 'message' => 'Event Added sucessfully.'], 200);
+        }
     }
 
     /**
@@ -60,63 +103,72 @@ class EventController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $event_delete = Event::find($id)->delete();
+
+         if ($event_delete) {
+             return response()->json(['success' => true, 'message' => 'Event has been deleted.', 'data' => []], 200);
+         } else {
+             return response()->json(['success' => false, 'message' => 'Something went wrong.', 'data' => []], 200);
+         }
     }
 
-    public function profile_list()
+    public function event_list()
     {
+        $data = Event::latest()->get();
 
-        dd("event_list");
-        // $data = DoctorProfile::with(['speciality','department'])->latest()->get();
+        return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('status', function (Event $data) {
+                if ($data->active == 1) {
+                    $status_link = '<input class="tgl status_btn" type="checkbox" data-toggle="toggle" data-width="100" id="is_show" name="is_show" data-on="Show" data-off="Hide" data-onstyle="success"
+                    data-offstyle="danger" value="' . $data->id . '" checked>';
+                } else {
+                    $status_link = '<input class="tgl status_btn" type="checkbox" data-toggle="toggle" data-width="100" id="is_show" name="is_show" data-on="Show" data-off="Hide" data-onstyle="success"
+                    data-offstyle="danger" value="' . $data->id . '">';
+                }
+                return $status_link;
+            })
+            ->addColumn('actions', function (Event $data) {
+                if ($data->isActivate()) {
+                    $button = 'success';
+                    $text = 'Deactivate';
+                    $title = 'You want to deactivate this doctor?';
+                    $icon = '<i class="fa fa-unlock"></i>';
+                } else {
+                    $button = 'danger';
+                    $text = 'Activate';
+                    $title = 'You want to activate this doctor?';
+                    $icon = '<i class="fa fa-lock"></i>';
+                }
 
-        // return DataTables::of($data)
-        //     ->addIndexColumn()
-        //     ->addColumn('photo', function (DoctorProfile $data) {
-        //         if ($data->profile_photo !='') {
-        //             $url= asset('../storage/app/public/uploads/doctor_profile/'. $data->profile_photo);
-        //         }
-        //         return '<img src="'.$url.'" class="wi-50" align="center" />';
-        //     })
-        //     ->addColumn('full_name', function (DoctorProfile $data) {
-        //         return $data->prefix.' '.$data->full_name;
-        //     })
-        //     ->addColumn('department', function (DoctorProfile $data) {
-        //         return $data->department->department_name;
-        //     })
-        //     ->addColumn('status', function (DoctorProfile $data) {
-        //         if ($data->active == 1) {
-        //             $status_link = '<input class="tgl status_btn" type="checkbox" data-toggle="toggle" data-width="100" id="is_show" name="is_show" data-on="Show" data-off="Hide" data-onstyle="success"
-        //             data-offstyle="danger" value="' . $data->id . '" checked>';
-        //         } else {
-        //             $status_link = '<input class="tgl status_btn" type="checkbox" data-toggle="toggle" data-width="100" id="is_show" name="is_show" data-on="Show" data-off="Hide" data-onstyle="success"
-        //             data-offstyle="danger" value="' . $data->id . '">';
-        //         }
-        //         return $status_link;
-        //     })
-        //     ->addColumn('actions', function (DoctorProfile $data) {
-        //         if ($data->isActivate()) {
-        //             $button = 'success';
-        //             $text = 'Deactivate';
-        //             $title = 'You want to deactivate this doctor?';
-        //             $icon = '<i class="fa fa-unlock"></i>';
-        //         } else {
-        //             $button = 'danger';
-        //             $text = 'Activate';
-        //             $title = 'You want to activate this doctor?';
-        //             $icon = '<i class="fa fa-lock"></i>';
-        //         }
+                $edit_link = '<a title="View Details" href="' . route('admin.event.edit', [$data->id]) . '" class="btn btn-primary btn-icon-text" style="padding: 0.375rem 0.75rem;font-size: 1rem;">' .
+                'Edit' .
+                '</a>';
 
-        //         $edit_link = '<a title="View Details" href="' . route('admin.doctor.edit', [$data->id]) . '" class="btn btn-primary btn-icon-text" style="padding: 0.375rem 0.75rem;font-size: 1rem;">' .
-        //         '<i class="fa fa-pencil"></i>' .
-        //         '</a>';
+                $delete_link = '<a title="Delete Doctor" href="' . route('admin.event.destroy', [$data->id]) . '" class="delete-link btn btn-danger btn-icon-text" style="padding: 0.375rem 0.75rem;font-size: 1rem;">' .
+                'Delete' .
+                '</a>';
 
-        //         $delete_link = '<a title="Delete Doctor" href="' . route('admin.doctor.destroy', [$data->id]) . '" class="delete-link btn btn-danger btn-icon-text" style="padding: 0.375rem 0.75rem;font-size: 1rem;">' .
-        //         '<i class="fa fa-trash"></i>' .
-        //         '</a>';
+                return $edit_link . ' ' . $delete_link;
+            })
+            ->rawColumns(['actions', 'status'])
+            ->make(true);
+    }
 
-        //         return $edit_link . ' ' . $delete_link;
-        //     })
-        //     ->rawColumns(['actions','photo', 'status'])
-        //     ->make(true);
+    public function activateToggle($id)
+    {
+        // dd($id);
+        // if ($event->activateToggle()->save()) {
+        //     return response()->json(['success' => true, 'message' => 'Event activate status changed.', 'data' => []], 200);
+        // } else {
+        //     return response()->json(['success' => false, 'message' => 'Something went wrong.', 'data' => []], 200);
+        // }
+
+        $event = Event::findOrFail($id);
+
+        $event->active = !$event->active;
+        $event->save();
+
+        return response()->json(['success' => true, 'message' => 'Event activate status changed.', 'data' => []], 200);
     }
 }

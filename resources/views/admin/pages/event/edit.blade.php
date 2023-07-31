@@ -1,0 +1,81 @@
+@extends('admin.layouts.login_after')
+
+@section('style')
+@endsection
+
+@section('content')
+    <div style="margin-left: 230px;">
+        <div class="page-body">
+            <div class="container-fluid">
+                <div class="page-title" style="margin-top: 18px;">
+                    <div class="row">
+                        <div class="col-6">
+                            <h3>Update Event</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid doctors_profile">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="{{ route('admin.event.update', $event_details->id) }}" method="POST" id="edit_event_form"
+                            name="edit_event_form" class="form-inline" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <div class="row">
+                                <div class="col-lg-6 pe-2">
+                                    <div class="mb-3">
+                                        <label for="person_name" class="form-label">Person Name</label>
+                                        <input type="text" class="form-control" id="person_name" name="person_name"
+                                            placeholder="Person Name" value="{{ $event_details->person_name }}"/>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <label for="category_id" class="form-label">Event Category</label>
+                                    <select class="form-select custom_select" name="category_id" id="category_id">
+                                        <option value="" selected disabled>Select Category</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}" {{ $category->id == $event_details->category_id ? 'selected' : '' }}>{{ $category->category }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6 mb-3">
+                                    <label for="event_date" class="form-label">Event Date</label>
+                                    <input type="date" class="form-control" id="event_date"
+                                        name="event_date" value="{{ $event_details->event_date }}"/>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12 pe-2">
+                                <div class="mb-3">
+                                    <label for="detail" class="form-label">Details</label>
+                                    <textarea class="form-control" placeholder="detail" id="detail" name="detail" style="height: 100px">{{ $event_details->detail }}</textarea>
+                                    <label id="detail-error" class="error" for="detail"></label>
+                                </div>
+
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <a class="btn btn-secondary modelbtn" type="button"
+                                        href="{{ route('admin.event.index') }}">
+                                        Close
+                                    </a>
+                                    <button class="btn btn-primary" type="submit" title=""> Update </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('script')
+    <script src="{{ asset('admin_assets/custom/event.js') }}"></script>
+@endsection

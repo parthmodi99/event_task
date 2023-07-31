@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\User\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::get('calendar', [HomeController::class, 'calendar'])->name('calendar');
+Route::post('manage_event', [HomeController::class, 'manage_event'])->name('manage_event');
