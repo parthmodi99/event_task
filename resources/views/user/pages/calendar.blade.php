@@ -28,7 +28,11 @@
             });
 
             var calendar = $('#calendar').fullCalendar({
-                editable: true,
+                header: {
+                    left: 'prev,next,today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
                 events: {!! collect($list) !!},
                 displayEventTime: false,
                 editable: true,
@@ -43,15 +47,10 @@
                 selectable: true,
                 selectHelper: true,
                 select: function(start, end, allDay) {
-                    // console.log(start);
-
                     var title = prompt('Event Title:');
-                    alert("title=>" + title)
                     if (title) {
                         var start = $.fullCalendar.formatDate(start, "Y-MM-DD");
                         var end = $.fullCalendar.formatDate(end, "Y-MM-DD");
-                        // alert(start);
-                        // alert(end);
                         $.ajax({
                             url: base_url + "/manage_event",
                             data: {

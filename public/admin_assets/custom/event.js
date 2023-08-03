@@ -13,29 +13,28 @@ $(document).ready(function () {
             type: 'post'
         },
         columns: [{
-            data: 'DT_RowIndex',
-            orderable: false,
-            searchable: false
-        },
-        {
-            data: 'person_name',
-            name: 'person_name'
-        },
-        {
-            data: 'event_date',
-            name: 'event_date'
-        },
-        {
-            data: 'status',
-            name: 'status',
-            orderable: false,
-            searchable: false
-        },
-        {
-            data: 'actions',
-            orderable: false,
-            searchable: false
-        },
+                data: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            },
+            {
+                data: 'person_name',
+                name: 'person_name'
+            },
+            {
+                data: 'event_date',
+            },
+            {
+                data: 'status',
+                name: 'status',
+                orderable: false,
+                searchable: false
+            },
+            {
+                data: 'actions',
+                orderable: false,
+                searchable: false
+            },
         ]
     });
 
@@ -44,12 +43,12 @@ $(document).ready(function () {
         let link = this;
 
         swal({
-            title: "Are you sure?",
-            text: link.getAttribute('data-title'),
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
+                title: "Are you sure?",
+                text: link.getAttribute('data-title'),
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
             .then((result) => {
                 if (result) {
                     $.ajax({
@@ -58,19 +57,27 @@ $(document).ready(function () {
                         dataType: 'json',
                         success: function (response) {
                             if (response.success) {
-                                $.notify(response.message, { type: 'success' });
+                                $.notify(response.message, {
+                                    type: 'success'
+                                });
                                 document.dataTable.draw();
                             } else if (!response.success) {
-                                $.notify(response.message, { type: 'danger' });
+                                $.notify(response.message, {
+                                    type: 'danger'
+                                });
                             } else {
-                                $.notify(response.message, { type: 'danger' });
+                                $.notify(response.message, {
+                                    type: 'danger'
+                                });
                             }
                         },
                         error: function (response) {
                             let errors = response.responseJSON.errors;
 
                             if (errors) {
-                                $.notify(Object.values(errors)[0], { type: 'danger' });
+                                $.notify(Object.values(errors)[0], {
+                                    type: 'danger'
+                                });
                             }
                         }
                     })
@@ -83,12 +90,12 @@ $(document).ready(function () {
         let link = this;
 
         swal({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
             .then((result) => {
                 if (result) {
                     $.ajax({
@@ -97,19 +104,27 @@ $(document).ready(function () {
                         dataType: 'json',
                         success: function (response) {
                             if (response.success) {
-                                $.notify(response.message, { type: 'success' });
+                                $.notify(response.message, {
+                                    type: 'success'
+                                });
                                 document.dataTable.draw();
                             } else if (!response.success) {
-                                $.notify(response.message, { type: 'danger' });
+                                $.notify(response.message, {
+                                    type: 'danger'
+                                });
                             } else {
-                                $.notify('Something went wrong', { type: 'danger' });
+                                $.notify('Something went wrong', {
+                                    type: 'danger'
+                                });
                             }
                         },
                         error: function (response) {
                             let errors = response.responseJSON.errors;
 
                             if (errors) {
-                                $.notify(Object.values(errors)[0], { type: 'danger' });
+                                $.notify(Object.values(errors)[0], {
+                                    type: 'danger'
+                                });
                             }
                         }
                     })
@@ -125,7 +140,7 @@ $(document).ready(function () {
             "person_name": {
                 required: true,
             },
-            "event_date": {
+            "start_date": {
                 required: true,
             }
         },
@@ -133,13 +148,13 @@ $(document).ready(function () {
             "person_name": {
                 required: "Please enter person name",
             },
-            "event_date": {
+            "start_date": {
                 required: "Please select Event Date",
             }
         },
         submitHandler: function (form) {
             var formData = new FormData(form);
-            $("#add_category_form button[type='submit']").attr('disabled',true);
+            $("#add_category_form button[type='submit']").attr('disabled', true);
             $.ajax({
                 url: $(form).attr("action"),
                 type: 'post',
@@ -164,7 +179,7 @@ $(document).ready(function () {
                     }
                 }
             });
-            $("#add_category_form button[type='submit']").attr('disabled',false);
+            $("#add_category_form button[type='submit']").attr('disabled', false);
         }
     });
 
@@ -175,7 +190,7 @@ $(document).ready(function () {
             "person_name": {
                 required: true,
             },
-            "event_date": {
+            "start_date": {
                 required: true,
             }
         },
@@ -183,13 +198,13 @@ $(document).ready(function () {
             "person_name": {
                 required: "Please enter person name",
             },
-            "event_date": {
+            "start_date": {
                 required: "Please select Event Date",
             }
         },
         submitHandler: function (form) {
             var formData = new FormData(form);
-            $("#add_category_form button[type='submit']").attr('disabled',true);
+            $("#add_category_form button[type='submit']").attr('disabled', true);
             $.ajax({
                 url: $(form).attr("action"),
                 type: 'post',
@@ -214,7 +229,7 @@ $(document).ready(function () {
                     }
                 }
             });
-            $("#add_category_form button[type='submit']").attr('disabled',false);
+            $("#add_category_form button[type='submit']").attr('disabled', false);
         }
     });
 
@@ -222,17 +237,17 @@ $(document).ready(function () {
         $('input[type=checkbox][data-toggle^=toggle]').bootstrapToggle();
     });
 
-    $(document).on('change', '.status_btn', function(e) {
+    $(document).on('change', '.status_btn', function (e) {
         e.preventDefault();
         id = this.value;
         // alert(id)
         $.ajax({
             type: 'POST',
             url: base_url + '/admin/event/' + id + '/activate/toggle',
-            "initComplete": function(settings, json) {
+            "initComplete": function (settings, json) {
                 $('.tgl').bootstrapToggle()
             },
-            success: function(response) {
+            success: function (response) {
                 $.notify(response.message, {
                     type: 'success'
                 });
@@ -246,5 +261,26 @@ $(document).ready(function () {
     var yyyy = today.getFullYear();
 
     today = yyyy + '-' + mm + '-' + dd;
-    $('#event_date').attr('min',today);
+    $('#start_date').attr('min', today);
+
+    $('#start_date').change(function () {
+        var date = $(this).val();
+        const validDate = new Date(date)
+
+        var nextDay = new Date(validDate);
+        nextDay.setDate(validDate.getDate() + 1);
+        var nextDate = moment(nextDay).format('DD-MM-YYYY');
+        console.log(nextDate);
+
+        $('#end_date').val(nextDate);
+    });
+
+    // function formatDate(date) {
+    //     const year = date.getFullYear();
+    //     const month = String(date.getMonth() + 1).padStart(2, '0');
+    //     const day = String(date.getDate()).padStart(2, '0');
+    //     return `${year}-${month}-${day}`;
+    // }
+
+
 });

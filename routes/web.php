@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\ManageEventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,4 +21,6 @@ Route::get('/', function () {
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('calendar', [HomeController::class, 'calendar'])->name('calendar');
-Route::post('manage_event', [HomeController::class, 'manage_event'])->name('manage_event');
+// Route::post('manage_event', [HomeController::class, 'manage_event'])->name('manage_event');
+
+Route::resource('manage_event', ManageEventController::class);

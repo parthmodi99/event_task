@@ -40,39 +40,39 @@ class HomeController extends Controller
         return view('user.pages.calendar', compact('list'));
     }
 
-    public function manage_event(Request $request)
-    {
+    // public function manage_event(Request $request)
+    // {
 
-        switch ($request->type) {
-           case 'add':
-              $event = Event::create([
-                  'person_name' => $request->title,
-                  'event_date' => $request->start,
-                  'end' => $request->end,
-              ]);
+    //     switch ($request->type) {
+    //        case 'add':
+    //           $event = Event::create([
+    //               'person_name' => $request->title,
+    //               'event_date' => $request->start,
+    //               'end' => $request->end,
+    //           ]);
 
-              return response()->json($event);
-             break;
+    //           return response()->json($event);
+    //          break;
 
-           case 'update':
-              $event = Event::find($request->id)->update([
-                  'person_name' => $request->title,
-                  'event_date' => $request->start,
-                  'end' => $request->end,
-              ]);
+    //        case 'update':
+    //           $event = Event::find($request->id)->update([
+    //               'person_name' => $request->title,
+    //               'event_date' => $request->start,
+    //               'end' => $request->end,
+    //           ]);
 
-              return response()->json($event);
-             break;
+    //           return response()->json($event);
+    //          break;
 
-           case 'delete':
-            // dd($request->id);
-              $event = Event::find($request->id)->delete();
-              return response()->json($event);
-             break;
+    //        case 'delete':
+    //         // dd($request->id);
+    //           $event = Event::find($request->id)->delete();
+    //           return response()->json($event);
+    //          break;
 
-           default:
-             # code...
-             break;
-        }
-    }
+    //        default:
+    //          # code...
+    //          break;
+    //     }
+    // }
 }

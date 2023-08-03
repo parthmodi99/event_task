@@ -44,10 +44,18 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-6 mb-3">
+                                {{-- <div class="col-lg-6 mb-3">
                                     <label for="event_date" class="form-label">Event Date</label>
                                     <input type="date" class="form-control" id="event_date"
-                                        name="event_date" value="{{ $event_details->event_date }}"/>
+                                        name="event_date" value="{{ $event_details->start_date }}"/>
+                                </div> --}}
+                                <div class="col-lg-6 mb-3">
+                                    <label for="start_date" class="form-label">Start Date</label>
+                                    <input type="date" class="form-control" id="start_date" name="start_date" value="{{ date('Y-m-d', strtotime($event_details->start_date)) }}"/>
+                                </div>
+                                <div class="col-lg-6 mb-3">
+                                    <label for="end_date" class="form-label">End Date</label>
+                                    <input type="text" class="form-control" id="end_date" name="end_date" value="{{ date('d-m-Y', strtotime($event_details->end_date)) }}" readonly/>
                                 </div>
                             </div>
 

@@ -45,11 +45,17 @@
 
                             <div class="row">
                                 <div class="col-lg-6 mb-3">
-                                    <label for="event_date" class="form-label">Event Date</label>
-                                    <input type="date" class="form-control" id="event_date"
-                                        name="event_date" />
+                                    <label for="start_date" class="form-label">Start Date</label>
+                                    <input type="date" class="form-control" id="start_date"
+                                        name="start_date"/>
+                                </div>
+                                <div class="col-lg-6 mb-3">
+                                    <label for="end_date" class="form-label">End Date</label>
+                                    <input type="text" class="form-control" id="end_date"
+                                        name="end_date" value="" readonly/>
                                 </div>
                             </div>
+
 
                             <div class="col-lg-12 pe-2">
                                 <div class="mb-3">

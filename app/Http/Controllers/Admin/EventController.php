@@ -41,7 +41,7 @@ class EventController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'person_name' => 'required',
-            'event_date' => 'required|after:yesterday',
+            'start_date' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -49,6 +49,9 @@ class EventController extends Controller
         }
 
         $event = $request->all();
+
+        $event['start_date']= date('Y-m-d H:i:s', strtotime($request->start_date));
+        $event['end_date']= date('Y-m-d H:i:s', strtotime($request->end_date));
         $success = Event::create($event);
 
         if ($success) {
@@ -81,7 +84,7 @@ class EventController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'person_name' => 'required',
-            'event_date' => 'required|after:yesterday',
+            'start_date' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -91,6 +94,8 @@ class EventController extends Controller
         $find_event = Event::find($id);
 
         $update_event = $request->all();
+        $update_event['start_date']= date('Y-m-d H:i:s', strtotime($request->start_date));
+        $update_event['end_date']= date('Y-m-d H:i:s', strtotime($request->end_date));
         $success = Event::find($id)->update($update_event);
 
         if ($success) {
@@ -118,6 +123,13 @@ class EventController extends Controller
 
         return DataTables::of($data)
             ->addIndexColumn()
+            ->addColumn('event_date', function (Event $data) {
+
+                if($data->start_date != ''){
+                    $date = date('d/m/Y', strtotime($data->start_date));
+                }
+                return $date;
+            })
             ->addColumn('status', function (Event $data) {
                 if ($data->active == 1) {
                     $status_link = '<input class="tgl status_btn" type="checkbox" data-toggle="toggle" data-width="100" id="is_show" name="is_show" data-on="Show" data-off="Hide" data-onstyle="success"
@@ -151,19 +163,12 @@ class EventController extends Controller
 
                 return $edit_link . ' ' . $delete_link;
             })
-            ->rawColumns(['actions', 'status'])
+            ->rawColumns(['actions', 'status', 'event_date'])
             ->make(true);
     }
 
     public function activateToggle($id)
     {
-        // dd($id);
-        // if ($event->activateToggle()->save()) {
-        //     return response()->json(['success' => true, 'message' => 'Event activate status changed.', 'data' => []], 200);
-        // } else {
-        //     return response()->json(['success' => false, 'message' => 'Something went wrong.', 'data' => []], 200);
-        // }
-
         $event = Event::findOrFail($id);
 
         $event->active = !$event->active;
